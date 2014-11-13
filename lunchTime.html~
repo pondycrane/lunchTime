@@ -1,0 +1,64 @@
+<!-- simple-todos.html -->
+<head>
+  <title>Todo List</title>
+</head>
+
+<body>
+  <div class="container">
+<header>
+  <h1>Todo List</h1>
+
+  <!-- add a form below the h1 -->
+  <form class="new-task">
+    <input type="text" name="text" placeholder="Type to add new tasks" />
+  </form>
+</header>
+
+    <ul>
+      {{#each tasks}}
+        {{> task}}
+      {{/each}}
+    </ul>
+  </div>
+
+<div>
+	{{> chatroom}}
+</div>
+
+</body>
+
+
+
+
+
+<template name="task">
+  <li class="{{#if checked}}checked{{/if}}">
+    <button class="delete">&times;</button>
+
+    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+
+    <span class="text">{{text}}</span>
+  </li>
+</template>
+
+
+<template name="chatroom">
+	<div style="overflow-y:scroll;" class="inner" id="message">
+	{{#each posts}}
+		<div>
+			<span style="color:yellow;">{{author}}: </span>
+			<span style="color:white;">{{text}}</span>
+		</div>
+	{{/each}}
+	</div>
+	<hr>
+	<div class="pos_fixed">
+		<form>
+		<span style="color:white;">Author</span><input name="author" type="text">
+		<hr>
+		<span style="color:white;">Message</span><input name="chat_text" type="text" value="{{chat_text}}">
+		<button class="send">Send</button>
+		</form>
+	</div>
+
+</template>
