@@ -16,14 +16,41 @@
 		<button class="place_order">Add order</button>
 	</form>
 </header>
-	<ul>
-		{{#each orders}}
-			{{> order}}
-		{{/each}}
-	</ul>
-	<ul>
-		<span>Total cost is {{total}}</span>
-	</ul>
+	<li>
+		<table style="width:95%"  table-layout="fixed">
+    <col width="25%" />
+    <col width="25%" />
+    <col width="25%" />
+    <col width="25%" />
+			<tr>
+				<th>Dish</th><th>Count</th><th>Orderer</th><th>Cost</th>
+			</tr>
+				{{#each arrayify conclusion}}
+				<tr><td>{{Dish}}</td><td>{{Count}}</td><td>{{Orderer}}</td><td>{{Cost}}</td></tr>
+				{{/each}}
+			<tr>
+				<th colspan="4">Total cost is: {{total}} NTD</th>
+			</tr>
+			<tr>
+				<th colspan="4">Total orders: {{order_count}}</th>
+			</tr>
+		</table>
+	</li>
+
+	<li>
+		<table style="width:95%" class="table table-striped">
+			<tr>
+				<th>Name</th><th>Dish</th><th>Price</th><th></th>
+			</tr>
+			{{#each orders}}
+				{{> order}}
+			{{/each}}
+			<tr>
+				<th colspan="4">Total cost is: {{total}} NTD</th>
+			</tr>
+		</table>
+	</li>
+
   <form class="new-task">
     <input type="text" name="text" placeholder="Type to add new tasks" />
   </form>
@@ -56,16 +83,18 @@
 
 
 <template name="order">
-	<li> 
-		<button class="delete">&times;</button>
-		<span class="text">{{name}} {{dish}} {{price}}</span>
-	</li>
+		<tr>
+			<td>{{name}}</td><td>{{dish}}</td><td>{{price}}</td><td><button class="delete">&times;</button></td>
+		</tr>
+		
 </template>
 
 <template name="summary">
-	<li> 
-		<span class="text">this is summary: {{total}}</span>
-	</li>
+	<tr>
+
+	<td>this is summary: {{total}}</td>
+
+	</tr>
 </template>
 
 

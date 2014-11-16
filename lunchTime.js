@@ -19,6 +19,24 @@ if (Meteor.isClient) {
 			total += parseFloat(alldata[i].price); 
 		}
 		return total.toString(); 
+	}, 
+	order_count: function() {
+		return Orders.find().count(); 
+	},
+	conclusion: function() {
+		var conclusion = {}; 
+		var seen = []; 
+		var alldata = Orders.find().fetch(); 
+		for (var i=0; i<alldata.length; i++) {
+			if (seen.indexOf(alldata[i].dish) < 0) {
+				conclusion[alldata[i].dish] = {Count:0, Orderer:[], Cost:0}; 
+				seen.push(alldata[i].dish); 
+			}
+			conclusion[alldata[i].dish].Count++; 
+			conclusion[alldata[i].dish].Orderer.push(alldata[i].name); 
+			conclusion[alldata[i].dish].Cost += +alldata[i].price; 
+		}
+		return conclusion; 
 	}
   })
 
@@ -28,7 +46,11 @@ if (Meteor.isClient) {
 
 ;
 
-
+Handlebars.registerHelper('arrayify',function(obj){
+    result = [];
+    for (var key in obj) result.push({Dish:key,Count:obj[key].Count,Orderer:obj[key].Orderer.join(),Cost:obj[key].Cost});
+    return result;
+});
 
 // Inside the if (Meteor.isClient) block, right after Template.body.helpers:
 Template.body.events({
