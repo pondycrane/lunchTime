@@ -1,6 +1,6 @@
 <!-- simple-todos.html -->
 <head>
-  <title>Todo List</title>
+  <title>Lunch order!!</title>
 </head>
 
 <body>
@@ -20,6 +20,9 @@
 		{{#each orders}}
 			{{> order}}
 		{{/each}}
+	</ul>
+	<ul>
+		<span>Total cost is: {{total}} NTD</span>
 	</ul>
   <form class="new-task">
     <input type="text" name="text" placeholder="Type to add new tasks" />
@@ -56,6 +59,12 @@
 	<li> 
 		<button class="delete">&times;</button>
 		<span class="text">{{name}} {{dish}} {{price}}</span>
+	</li>
+</template>
+
+<template name="summary">
+	<li> 
+		<span class="text">this is summary: {{total}}</span>
 	</li>
 </template>
 

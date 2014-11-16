@@ -1,6 +1,6 @@
 <!-- simple-todos.html -->
 <head>
-  <title>Todo List</title>
+  <title>Lunch order!!</title>
 </head>
 
 <body>
@@ -20,6 +20,9 @@
 		{{#each orders}}
 			{{> order}}
 		{{/each}}
+	</ul>
+	<ul>
+		<span>Total cost is {{total}}</span>
 	</ul>
   <form class="new-task">
     <input type="text" name="text" placeholder="Type to add new tasks" />
@@ -59,6 +62,12 @@
 	</li>
 </template>
 
+<template name="summary">
+	<li> 
+		<span class="text">this is summary: {{total}}</span>
+	</li>
+</template>
+
 
 <template name="chatroom">
 	<div style="overflow-y:scroll;" class="inner" id="message">
@@ -72,8 +81,8 @@
 	<hr>
 	<div class="pos_fixed">
 		<form>
-			<input name="author" type="text" placeholder="Author">
-			<input name="chat_text" type="text" value="{{chat_text}}" placeholder="Message">
+			<input name="author" type="text" placeholder="Author" width="100%">
+			<input name="chat_text" type="text" value="{{chat_text}}" placeholder="Message" width="100%">
 		<button class="send">Send</button>
 		</form>
 	</div>

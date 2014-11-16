@@ -10,7 +10,15 @@ if (Meteor.isClient) {
     	return Tasks.find({}, {sort: {createdAt: -1}});
     },
 	orders: function() {
-		return Orders.find()
+		return Orders.find(); 
+	}, 
+	total: function() {
+		var total = 0; 
+		var alldata = Orders.find().fetch(); 
+		for (var i=0; i<alldata.length; i++) {
+			total += parseFloat(alldata[i].price); 
+		}
+		return total; 
 	}
   })
 
@@ -44,11 +52,10 @@ Template.body.events({
 		var name = event.target.name.value;
 		var dish = event.target.dish.value;
 		var price = event.target.price.value;
-		/*
-		var name = $('input[name=name]');
-		var dish = $('input[name=dish]');
-		var price = $('input[name=price]');
-		*/
+		if (isNaN(price)) {
+			alert("Price must be numbers"); 
+			return false; 
+		}
 		Orders.insert({
 			name: name, 
 			dish: dish, 
