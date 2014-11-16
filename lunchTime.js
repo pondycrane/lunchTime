@@ -1,13 +1,17 @@
 // simple-todos.js
 Tasks = new Mongo.Collection("tasks");
 var Messages = new Meteor.Collection("Messages"); 
+Orders = new Meteor.Collection("orders");
 
 if (Meteor.isClient) {
   // This code only runs on the client
   Template.body.helpers({
     tasks: function () {
     	return Tasks.find({}, {sort: {createdAt: -1}});
-    }
+    },
+	orders: function() {
+		return Orders.find()
+	}
   })
 
 	Template.chatroom.helpers({
@@ -35,7 +39,21 @@ Template.body.events({
 
     // Prevent default form submit
     return false;
-  }
+  }, 
+	"submit .new-order": function (event) {
+		var name = event.target.name.value;
+		var dish = event.target.dish.value;
+		var price = event.target.price.value;
+		Orders.insert({
+			name: name, 
+			dish: dish, 
+			price: price		
+		});
+		event.target.name.value = "";
+		event.target.dish.value = "";
+		event.target.price.value = "";
+		return false; 
+	}
 });
 
 Template.task.events({
@@ -47,6 +65,12 @@ Template.task.events({
     Tasks.remove(this._id);
   }
 });
+
+Template.order.events({
+  "click .delete": function () {
+    Orders.remove(this._id);
+  }
+}); 
 
         Template.chatroom.events({
                 'submit form': function (event) {

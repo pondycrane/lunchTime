@@ -60,7 +60,21 @@ form {
   font-size: 1em;
 }
 
+.new-order input {
+  box-sizing: border-box;
+  padding: 10px 0;
+  background: transparent;
+  border: none;
+  width: 100%;
+  padding-right: 80px;
+  font-size: 1em;
+}
+
 .new-task input:focus{
+  outline: 0;
+}
+
+.new-order input:focus{
   outline: 0;
 }
 
@@ -121,8 +135,7 @@ header .hide-completed {
 
 .inner {
 	width:30%;
-	height:85%; 
-	top: 10px;
+	height:90%; 
     position: fixed;
 }
 

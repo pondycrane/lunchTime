@@ -6,14 +6,24 @@
 <body>
   <div class="container">
 <header>
-  <h1>Todo List</h1>
+  <h1>Lunch order!!</h1>
 
   <!-- add a form below the h1 -->
+	<form class="new-order">
+		<input type="text" name="name" placeholder="Name" />
+		<input type="text" name="dish" placeholder="What to eat" />
+		<input type="text" name="price" placeholder="Price" />
+		<button class="place_order">Add order</button>
+	</form>
+</header>
+	<ul>
+		{{#each orders}}
+			{{> order}}
+		{{/each}}
+	</ul>
   <form class="new-task">
     <input type="text" name="text" placeholder="Type to add new tasks" />
   </form>
-</header>
-
     <ul>
       {{#each tasks}}
         {{> task}}
@@ -42,6 +52,14 @@
 </template>
 
 
+<template name="order">
+	<li> 
+		<button class="delete">&times;</button>
+		<span class="text">{{name}} {{dish}} {{price}}</span>
+	</li>
+</template>
+
+
 <template name="chatroom">
 	<div style="overflow-y:scroll;" class="inner" id="message">
 	{{#each posts}}
@@ -54,9 +72,8 @@
 	<hr>
 	<div class="pos_fixed">
 		<form>
-		<span style="color:white;">Author</span><input name="author" type="text">
-		<hr>
-		<span style="color:white;">Message</span><input name="chat_text" type="text" value="{{chat_text}}">
+			<input name="author" type="text" placeholder="Author">
+			<input name="chat_text" type="text" value="{{chat_text}}" placeholder="Message">
 		<button class="send">Send</button>
 		</form>
 	</div>
