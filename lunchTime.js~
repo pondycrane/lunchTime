@@ -2,6 +2,9 @@
 Tasks = new Mongo.Collection("tasks");
 var Messages = new Meteor.Collection("Messages"); 
 Orders = new Meteor.Collection("orders");
+today = new Date(); 
+start = new Date(today.getFullYear(), today.getMonth(), today.getDate()); 
+end = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1); 
 
 if (Meteor.isClient) {
   // This code only runs on the client
@@ -10,20 +13,23 @@ if (Meteor.isClient) {
     	return Tasks.find({}, {sort: {createdAt: -1}});
     },
 	orders: function() {
-		return Orders.find(); 
+		return Orders.find({createdAt:{$gte: start, $lte: end}}); 
 	}, 
 	total: function() {
 		var total = 0; 
-		var alldata = Orders.find().fetch(); 
+		var alldata = Orders.find({createdAt:{$gte: start, $lte: end}}).fetch(); 
 		for (var i=0; i<alldata.length; i++) {
 			total += parseFloat(alldata[i].price); 
 		}
 		return total.toString(); 
 	}, 
+	order_count: function() {
+		return Orders.find({createdAt:{$gte: start, $lte: end}}).count(); 
+	},
 	conclusion: function() {
 		var conclusion = {}; 
 		var seen = []; 
-		var alldata = Orders.find().fetch(); 
+		var alldata = Orders.find({createdAt:{$gte: start, $lte: end}}).fetch(); 
 		for (var i=0; i<alldata.length; i++) {
 			if (seen.indexOf(alldata[i].dish) < 0) {
 				conclusion[alldata[i].dish] = {Count:0, Orderer:[], Cost:0}; 
@@ -78,7 +84,8 @@ Template.body.events({
 		Orders.insert({
 			name: name, 
 			dish: dish, 
-			price: price		
+			price: price, 
+			createdAt: new Date() // current time	
 		});
 		event.target.name.value = "";
 		event.target.dish.value = "";
