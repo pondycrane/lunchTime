@@ -7,7 +7,19 @@
   <div class="container">
 <header>
   <h1>Lunch order!!</h1>
-
+    <div class="well">
+      {{> picker}}
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <p class="alert alert-info">Just Uploaded</p>
+        {{> lister}}
+      </div>
+      <div class="col-md-6">
+        <p class="alert alert-info">Stored Uploads</p>
+        {{> stored}}
+      </div>
+    </div>
   <!-- add a form below the h1 -->
 	<form class="new-order">
 		<input type="text" name="name" placeholder="Name" />
@@ -17,7 +29,7 @@
 	</form>
 </header>
 	<li>
-		<table style="width:95%"  table-layout="fixed">
+		<table style="width:95%" class="table table-striped" table-layout="fixed">
     <col width="25%" />
     <col width="25%" />
     <col width="25%" />
@@ -116,4 +128,84 @@
 		</form>
 	</div>
 
+</template>
+
+<template name="pickerArea">
+  <div id="picker-area">
+    <input type="filepicker-dragdrop"
+    data-fp-apikey="AlYuPfsxZR6SA1MLnywccz"
+    data-fp-mimetypes="image/*"
+    data-fp-button-class="btn btn-primary"
+    data-fp-drag-class="fpdrag"
+    data-fp-container="modal"
+    data-fp-multiple="true"
+    onchange="Session.set('fpfiles', event.fpfiles);">
+  </div>
+</template>
+
+<template name="picker">
+{{#if apikey}}
+  {{#if fploaded}}
+    <div class="row">
+      <div class="col-md-8">
+        {{> pickerArea}}
+      </div>
+      <div class="col-md-4 text-right">
+        <a class="btn btn-default btn-sm forget" href="#">Forget API Key</a>
+      </div>
+    </div>
+  {{else}}
+    loading...
+  {{/if}}
+{{else}}
+  <form action="?" id="apikeyform" role="form" class="form-inline">
+    <div class="form-group">
+      <label>
+        <label class="sr-only" for="apikey">API Key</label>
+        <input class="form-control" type="text" id="apikey" placeholder="API Key Here..." style="min-width:300px;">
+      </label>
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary">Store API Key</button>
+        <a href="https://www.filepicker.io/" class="btn btn-link" target="_blank">Get One</a>
+      </div>
+    </div>
+  </form>
+{{/if}}
+</template>
+
+
+<template name="lister">
+{{#each files}}
+<p>
+<a href="#" class="store btn btn-primary pull-right">
+  <span class="glyphicon glyphicon-download"></span>
+  store
+</a>
+<strong>{{filename}}</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <em>{{mimetype}}</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <em>{{size}}</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp; {{url}}<br>
+{{#if isImg}}
+<img src="{{url}}"><br>
+{{/if}}
+</p>
+{{/each}}
+</template>
+
+<template name="stored">
+{{#each files}}
+<p>
+<a href="#" class="forget btn btn-danger pull-right">
+  <span class="glyphicon glyphicon-remove"></span>
+  forget
+</a>
+<strong>{{filename}}</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <em>{{mimetype}}</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <em>{{size}}</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp; {{url}}<br>
+{{#if isImg}}
+<img src="{{url}}"><br>
+{{/if}}
+</p>
+{{/each}}
 </template>
