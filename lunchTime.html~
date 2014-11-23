@@ -25,14 +25,18 @@
 	    </div>
     </li>
   <!-- add a form below the h1 -->
-	<form class="new-order">
-		<input type="text" name="name" placeholder="Name" />
-		<input type="text" name="dish" placeholder="What to eat" />
-		<input type="text" name="price" placeholder="Price" />
-		<button class="place_order">Add order</button>
-	</form>
-	<div>
-		{{> countdown}}
+	<div width="800px" margin="0 auto">
+		<div width="200px" margin-left="200px" background="red">
+			{{> countdown}} 
+		</div>
+		<div>
+			<form class="new-order">
+				<input type="text" name="name" placeholder="Name" />
+				<input type="text" name="dish" placeholder="What to eat" />
+				<input type="text" name="price" placeholder="Price" />
+				<button class="place_order">Add order</button>
+			</form>
+		</div>
 	</div>
 </header>
 	<li>
@@ -70,14 +74,6 @@
 		</table>
 	</li>
 
-  <form class="new-task">
-    <input type="text" name="text" placeholder="Type to add new tasks" />
-  </form>
-    <ul>
-      {{#each tasks}}
-        {{> task}}
-      {{/each}}
-    </ul>
   </div>
 
 <div>
@@ -128,14 +124,22 @@
 	</div>
 	<hr>
 	<div class="pos_fixed">
-		<form>
-			<input name="author" type="text" placeholder="Author" width="100%">
-			<input name="chat_text" type="text" value="{{chat_text}}" placeholder="Message" width="100%">
+		<form class="form-horizontal" role="form" position="fixed">
+			<div class="form-group">
+				<div class="col-sm-10">
+					<input class="form-control" name="author" type="text" placeholder="Author">
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-10">
+			<input class="form-control" name="chat_text" type="text" value="{{chat_text}}" placeholder="Message">
+				</div>
+			</div>
 		<button class="send">Send</button>
 		</form>
 	</div>
-
 </template>
+
 
 <template name="pickerArea">
   <div id="picker-area">
@@ -220,5 +224,5 @@
 </template>
 
 <template name="countdown">
-<strong>{{time}}</strong>
+<p><strong>Order before 10:50! ({{time}} seconds left)</strong></p>
 </template>

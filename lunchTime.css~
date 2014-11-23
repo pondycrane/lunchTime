@@ -1,4 +1,4 @@
-met/* CSS declarations go here */
+/* CSS declarations go here */
 body {
   font-family: sans-serif;
   background-color: #315481;
@@ -130,7 +130,7 @@ header .hide-completed {
 
 .pos_fixed {
 	float:left;
-	width:25%;
+	width:100%;
     position: fixed;
     bottom : 15px;
     left: 5px;
@@ -139,7 +139,7 @@ header .hide-completed {
 .inner {
 	width:30%;
 	height:80%; 
-    position: fixed;
+    	position: fixed;
 }
 
 @media (max-width: 600px) {
