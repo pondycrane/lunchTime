@@ -165,6 +165,12 @@ Handlebars.registerHelper('arrayify',function(obj){
     return result;
 });
 
+Template.countdown.helpers({
+	time: function() {
+		return 123; 
+	}
+}); 
+
 // Inside the if (Meteor.isClient) block, right after Template.body.helpers:
 Template.body.events({
   "submit .new-task": function (event) {
@@ -216,7 +222,10 @@ Template.task.events({
 
 Template.order.events({
   "click .delete": function () {
-    Orders.remove(this._id);
+	var r = confirm("Are you sure about deleting this order?"); 
+	if (r == true) { 
+		Orders.remove(this._id);
+	}
   }
 }); 
 

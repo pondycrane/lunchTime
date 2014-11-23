@@ -7,19 +7,23 @@
   <div class="container">
 <header>
   <h1>Lunch order!!</h1>
-    <div class="well">
-      {{> picker}}
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <p class="alert alert-info">Just Uploaded</p>
-        {{> lister}}
-      </div>
-      <div class="col-md-6">
-        <p class="alert alert-info">Stored Uploads</p>
-        {{> stored}}
-      </div>
-    </div>
+    <li>
+	    <div class="well">
+	      {{> picker}}
+	    </div>
+	    <div class="row">
+		<!--
+	      <div class="col-md-6">
+		<p class="alert alert-info">Just Uploaded</p>
+		{{> lister}}
+	      </div>
+		-->
+	      <div class="col-md-6">
+		<p class="alert alert-info">Today's Menu</p>
+		{{> stored}}
+	      </div>
+	    </div>
+    </li>
   <!-- add a form below the h1 -->
 	<form class="new-order">
 		<input type="text" name="name" placeholder="Name" />
@@ -27,6 +31,9 @@
 		<input type="text" name="price" placeholder="Price" />
 		<button class="place_order">Add order</button>
 	</form>
+	<div>
+		{{> countdown}}
+	</div>
 </header>
 	<li>
 		<table style="width:95%" class="table table-striped" table-layout="fixed">
@@ -199,13 +206,19 @@
   <span class="glyphicon glyphicon-remove"></span>
   forget
 </a>
+<!--
 <strong>{{filename}}</strong><br>
 &nbsp;&nbsp;&nbsp;&nbsp; <em>{{mimetype}}</em><br>
 &nbsp;&nbsp;&nbsp;&nbsp; <em>{{size}}</em><br>
 &nbsp;&nbsp;&nbsp;&nbsp; {{url}}<br>
+-->
 {{#if isImg}}
 <img src="{{url}}"><br>
 {{/if}}
 </p>
 {{/each}}
+</template>
+
+<template name="countdown">
+<strong>{{time}}</strong>
 </template>
