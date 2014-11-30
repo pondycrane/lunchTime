@@ -2,6 +2,8 @@
 Tasks = new Mongo.Collection("tasks");
 var Messages = new Meteor.Collection("Messages"); 
 Orders = new Meteor.Collection("orders");
+Users = new Meteor.Collection("users");
+History = new Meteor.Collection("history"); 
 today = new Date(); 
 start = new Date(today.getFullYear(), today.getMonth(), today.getDate()); 
 end = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1); 
@@ -159,6 +161,7 @@ if (Meteor.isClient) {
 
 ;
 
+
 Handlebars.registerHelper('arrayify',function(obj){
     result = [];
     for (var key in obj) result.push({Dish:key,Count:obj[key].Count,Orderer:obj[key].Orderer.join(),Cost:obj[key].Cost});
@@ -174,6 +177,10 @@ Template.countdown.helpers({
 			return diff; 
 		}
 	}
+}); 
+
+Template.people.helpers({
+	users: Users.find() 
 }); 
 
 // Inside the if (Meteor.isClient) block, right after Template.body.helpers:
@@ -217,8 +224,54 @@ Template.body.events({
 		event.target.dish.value = "";
 		event.target.price.value = "";
 		return false; 
+	}, 
+	"submit .admin-management": function (event) {
+		var user_name = event.target.user_name.value; 
+		var user_amount = event.target.user_amount.value; 
+		var nowUser = Users.find().fetch(); 
+		if (isNaN(user_amount)) {
+			alert("Amount must be numbers"); 
+			return false; 
+		} else if (user_name == "" || user_amount == "") {
+			alert("Please fill in name"); 
+			return false
+		} else {
+			pt = prompt("Enter admin password", ""); 
+			if (pt == "yoman") { 
+				var exist = checkExist(user_name, nowUser);
+				if (exist == false) {
+					Users.insert({
+						user_name: user_name, 
+						user_amount: +user_amount, 
+						createdAt: new Date()
+					}); 
+				} else {
+					nowMoney = Users.find({user_name: user_name}).fetch()[0].user_amount; 
+					id = Users.find({user_name: user_name}).fetch()[0]._id; 
+					Users.update({_id: id}, {$set: {user_amount: nowMoney+(+user_amount)}}); 
+				} 
+				event.target.user_name.value = "";
+				event.target.user_amount.value = "";
+				alert("Credit increased successfully! "); 
+				return false; 
+			} else {
+				alert("Wrong password. \nBad boy!"); 
+				event.target.user_name.value = "";
+				event.target.user_amount.value = "";
+				return false; 
+			}
+		}
 	}
 });
+
+function checkExist(name, existing) {
+	for (var i=0; i<existing.length; i++) {
+		if (existing[i].user_name == name) {
+			return true; 
+		}
+	}
+	return false; 
+}
 
 Template.task.events({
   "click .toggle-checked": function () {
