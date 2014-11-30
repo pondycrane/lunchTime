@@ -4,6 +4,8 @@ var Messages = new Meteor.Collection("Messages");
 Orders = new Meteor.Collection("orders");
 Users = new Meteor.Collection("users");
 History = new Meteor.Collection("history"); 
+
+
 today = new Date(); 
 start = new Date(today.getFullYear(), today.getMonth(), today.getDate()); 
 end = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1); 
@@ -116,7 +118,10 @@ if (Meteor.isClient) {
 
 
 
-
+if (History.find().fetch().length < 1) {
+	console.log(History.find().fetch().length); 
+	History.insert({name: "NoShow"}); 
+}
 
 
   // This code only runs on the client
@@ -125,23 +130,23 @@ if (Meteor.isClient) {
     	return Tasks.find({}, {sort: {createdAt: -1}});
     },
 	orders: function() {
-		return Orders.find({createdAt:{$gte: start, $lte: end}}); 
+		return Orders.find({createdAt:{$gte: start, $lte: end}, category:'consume'}); 
 	}, 
 	total: function() {
 		var total = 0; 
-		var alldata = Orders.find({createdAt:{$gte: start, $lte: end}}).fetch(); 
+		var alldata = Orders.find({createdAt:{$gte: start, $lte: end}, category:'consume'}).fetch(); 
 		for (var i=0; i<alldata.length; i++) {
 			total += parseFloat(alldata[i].price); 
 		}
 		return total.toString(); 
 	}, 
 	order_count: function() {
-		return Orders.find({createdAt:{$gte: start, $lte: end}}).count(); 
+		return Orders.find({createdAt:{$gte: start, $lte: end}, category:'consume'}).count(); 
 	},
 	conclusion: function() {
 		var conclusion = {}; 
 		var seen = []; 
-		var alldata = Orders.find({createdAt:{$gte: start, $lte: end}}).fetch(); 
+		var alldata = Orders.find({createdAt:{$gte: start, $lte: end}, category:'consume'}).fetch(); 
 		for (var i=0; i<alldata.length; i++) {
 			if (seen.indexOf(alldata[i].dish) < 0) {
 				conclusion[alldata[i].dish] = {Count:0, Orderer:[], Cost:0}; 
@@ -152,6 +157,17 @@ if (Meteor.isClient) {
 			conclusion[alldata[i].dish].Cost += +alldata[i].price; 
 		}
 		return conclusion; 
+	}, 
+	historyto: function() {
+		var name = History.find().fetch()[0].name; 
+		return Orders.find({name: name}); 
+	}, 
+	queryName: function() {
+		return History.find().fetch()[0].name; 
+	}, 
+	queryAsset: function() {
+		var bla = History.find().fetch()[0].name; 
+		return Users.find({user_name: bla}).fetch()[0].user_amount; 
 	}
   })
 
@@ -179,9 +195,13 @@ Template.countdown.helpers({
 	}
 }); 
 
-Template.users.helpers({
-	users: Users.find() 
+Template.people.helpers({
+	shit: function() {
+		return
+	}, 
+	users: Users.find()
 }); 
+
 
 // Inside the if (Meteor.isClient) block, right after Template.body.helpers:
 Template.body.events({
@@ -202,14 +222,17 @@ Template.body.events({
     return false;
   }, 
 	"submit .new-order": function (event) {
-		var name = event.target.name.value;
+		var name = event.target.people_selector1.value;
 		var dish = event.target.dish.value;
 		var price = event.target.price.value;
 		if (isNaN(price)) {
 			alert("Price must be numbers"); 
 			return false; 
-		} 
-		if (new Date() > new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
+		} else if (name == "NoShow") {
+			alert("Have to select one person"); 
+			return false; 
+		}
+		if (new Date() < new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
 			confirm("Sorry, pass the deadline"); 
 			return false; 
 		} else {
@@ -217,8 +240,13 @@ Template.body.events({
 				name: name, 
 				dish: dish, 
 				price: price, 
-				createdAt: new Date() // current time
+				category: 'consume', 
+				createdAt: new Date(),  // current time
+				createdAtString: (new Date()).toDateString()
 			});
+			nowMoney = Users.find({user_name: name}).fetch()[0].user_amount; 
+			id = Users.find({user_name: name}).fetch()[0]._id; 
+			Users.update({_id: id}, {$set: {user_amount: nowMoney-(+price)}}); 
 		}	
 		event.target.name.value = "";
 		event.target.dish.value = "";
@@ -245,10 +273,26 @@ Template.body.events({
 						user_amount: +user_amount, 
 						createdAt: new Date()
 					}); 
+					Orders.insert({
+						name: user_name, 
+						dish: 'Add credit', 
+						price: user_amount, 
+						category: 'save', 
+						createdAt: new Date(),  // current time
+						createdAtString: (new Date()).toDateString()
+					});
 				} else {
 					nowMoney = Users.find({user_name: user_name}).fetch()[0].user_amount; 
 					id = Users.find({user_name: user_name}).fetch()[0]._id; 
 					Users.update({_id: id}, {$set: {user_amount: nowMoney+(+user_amount)}}); 
+					Orders.insert({
+						name: user_name, 
+						dish: 'Add credit', 
+						price: user_amount, 
+						category: 'save', 
+						createdAt: new Date(),  // current time
+						createdAtString: (new Date()).toDateString()
+					});
 				} 
 				event.target.user_name.value = "";
 				event.target.user_amount.value = "";
@@ -260,6 +304,21 @@ Template.body.events({
 				event.target.user_amount.value = "";
 				return false; 
 			}
+		}
+	}, 
+	"submit .admin-query": function (event) {
+		var query_name = event.target.people_selector.value; 
+		if (query_name != "NoShow") {
+			if (History.find().fetch().length == 0) {
+				History.insert({name: query_name}); 
+			} else {
+				console.log('adjusting query'); 
+				id = History.find().fetch()[0]._id; 
+				History.update({_id: id}, {$set: {name: query_name}}); 
+			}
+			return false; 
+		} else {
+			return false; 
 		}
 	}
 });
@@ -279,16 +338,27 @@ Template.task.events({
     Tasks.update(this._id, {$set: {checked: ! this.checked}});
   },
   "click .delete": function () {
-    Tasks.remove(this._id);
+    if (new Date() > new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
+    	Tasks.remove(this._id);
+    } else {
+      alert('No way can you do this after 10:50!'); 
+    }
   }
 });
 
 Template.order.events({
   "click .delete": function () {
+    if (new Date() < new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
+      alert('No way can you do this after 10:50!'); 
+    } else {
 	var r = confirm("Are you sure about deleting this order?"); 
 	if (r == true) { 
 		Orders.remove(this._id);
+		var id = Users.find({user_name: this.name}).fetch()[0]._id; 
+		nowMoney = Users.find({user_name: this.name}).fetch()[0].user_amount; 
+		Users.update({_id: id}, {$set: {user_amount: nowMoney+(+this.price)}}); 
 	}
+    }
   }
 }); 
 
