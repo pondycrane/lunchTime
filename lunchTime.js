@@ -254,7 +254,8 @@ Template.body.events({
 		return false; 
 	}, 
 	"submit .admin-management": function (event) {
-		var user_name = event.target.user_name.value; 
+		var user_name = event.target.people_selector2.value;
+		if (user_name == 'NoShow') {var user_name = event.target.user_name.value; }
 		var user_amount = event.target.user_amount.value; 
 		var nowUser = Users.find().fetch(); 
 		if (isNaN(user_amount)) {
