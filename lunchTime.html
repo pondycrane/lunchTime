@@ -8,14 +8,8 @@
 <header>
   <h1>Lunch order!!</h1>
     <li>
-	    <div class="well">
-	      {{> picker}}
-	    </div>
+
 	    <div class="row">
-	      <div class="col-md-6">
-		<p class="alert alert-info">Just Uploaded</p>
-		{{> lister}}
-	      </div>
 	      <div class="col-md-6">
 		<p class="alert alert-info">Today's Menu</p>
 		{{> stored}}
@@ -109,7 +103,15 @@
 		<header>
 			<div>
 				<li>
-
+	    <div class="well">
+	      {{> picker}}
+	    </div>
+		<div class="row">
+	      <div class="col-md-6">
+		<p class="alert alert-info">Just Uploaded</p>
+		{{> lister}}
+	      </div>
+		</div>
 				</li>
 			</div>
 		</header>
