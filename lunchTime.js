@@ -234,7 +234,7 @@ Template.body.events({
 			alert("Have to select one person"); 
 			return false; 
 		}
-		if (new Date() < new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
+		if (new Date() > new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
 			confirm("Sorry, pass the deadline"); 
 			return false; 
 		} else {
