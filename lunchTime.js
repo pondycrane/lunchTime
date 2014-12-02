@@ -219,6 +219,14 @@ Template.body.events({
 		var name = event.target.people_selector1.value;
 		var dish = event.target.dish.value;
 		var price = event.target.price.value;
+		if (price == "") {
+			alert("Can't leave it blank!");
+			return false;  
+		}
+		if (dish == "") {
+			alert("Can't leave it blank!");
+			return false;  
+		}
 		if (isNaN(price)) {
 			alert("Price must be numbers"); 
 			return false; 
@@ -226,7 +234,7 @@ Template.body.events({
 			alert("Have to select one person"); 
 			return false; 
 		}
-		if (new Date() > new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
+		if (new Date() < new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
 			confirm("Sorry, pass the deadline"); 
 			return false; 
 		} else {
