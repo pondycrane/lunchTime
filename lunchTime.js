@@ -118,12 +118,6 @@ if (Meteor.isClient) {
 
 
 
-if (History.find().fetch().length < 1) {
-	console.log(History.find().fetch().length); 
-	History.insert({name: "NoShow"}); 
-}
-
-
   // This code only runs on the client
   Template.body.helpers({
     tasks: function () {
@@ -199,7 +193,7 @@ Template.people.helpers({
 	shit: function() {
 		return
 	}, 
-	users: Users.find()
+	users: Users.find({}, {sort: {user_name: 1}})
 }); 
 
 
