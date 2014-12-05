@@ -7,8 +7,13 @@ History = new Meteor.Collection("history");
 
 
 today = new Date(); 
-start = new Date(today.getFullYear(), today.getMonth(), today.getDate()); 
-end = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1); 
+if (+(new Date().getHours().toString()+new Date().getMinutes().toString()) > 1350) {
+	start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 13, 50); 
+	end = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, 13, 50); 
+} else {
+	start = new Date(today.getFullYear(), today.getMonth(), today.getDate()-1, 13, 50); 
+	end = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 13, 50);
+}
 
 FpApiKey = new Meteor.Collection('fpapikey');
 FpFiles = new Meteor.Collection('fpfiles');
@@ -174,7 +179,7 @@ if (Meteor.isClient) {
 
 Handlebars.registerHelper('arrayify',function(obj){
     result = [];
-    for (var key in obj) result.push({Dish:key,Count:obj[key].Count,Orderer:obj[key].Orderer.join(),Cost:obj[key].Cost});
+    for (var key in obj) result.push({Dish:key,Count:obj[key].Count,Orderer:obj[key].Orderer.join("<br />"),Cost:obj[key].Cost});
     return result;
 });
 
@@ -234,7 +239,7 @@ Template.body.events({
 			alert("Have to select one person"); 
 			return false; 
 		}
-		if (new Date() < new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
+		if (new Date() > new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50) && new Date() < new Date(today.getFullYear(), today.getMonth(), today.getDate(), 13, 50)) {
 			confirm("Sorry, pass the deadline"); 
 			return false; 
 		} else {
@@ -351,8 +356,8 @@ Template.task.events({
 
 Template.order.events({
   "click .delete": function () {
-    if (new Date() > new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
-      alert('No way can you do this after 10:50!'); 
+    if (new Date() > new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50) && new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50) > this.createdAt) {
+      alert("You can't delete this order now! "); 
     } else {
 	var r = confirm("Are you sure about deleting this order?"); 
 	if (r == true) { 

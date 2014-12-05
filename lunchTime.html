@@ -43,7 +43,7 @@
 				<th>Dish</th><th>Count</th><th>Orderer</th><th>Cost</th>
 			</tr>
 				{{#each arrayify conclusion}}
-				<tr><td>{{Dish}}</td><td>{{Count}}</td><td>{{Orderer}}</td><td>{{Cost}}</td></tr>
+				<tr><td>{{Dish}}</td><td>{{Count}}</td><td><p>{{Orderer}}</p></td><td>{{Cost}}</td></tr>
 				{{/each}}
 			<tr>
 				<th colspan="4">Total cost is: {{total}} NTD</th>
