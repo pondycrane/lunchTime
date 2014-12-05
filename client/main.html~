@@ -1,0 +1,136 @@
+<!-- simple-todos.html -->
+<head>
+  <title>Lunch order!!</title>
+</head>
+
+<body>
+  <div id="main">
+  <div class="container">
+<header>
+  <h1>Lunch order!!</h1>
+    <li>
+
+	    <div class="row">
+	      <div class="col-md-6">
+		<p class="alert alert-info">Today's Menu</p>
+		{{> stored}}
+	      </div>
+	    </div>
+    </li>
+  <!-- add a form below the h1 -->
+	<div width="800px" margin="0 auto">
+		<div width="200px" margin-left="200px" background="red">
+			{{> countdown}} 
+		</div>
+		<div>
+			<form class="new-order">
+				<select name="people_selector1">
+				{{> people}}
+				</select>
+				<input type="text" name="dish" placeholder="What to eat" />
+				<input type="text" name="price" placeholder="Price" />
+				<button class="place_order">Add order</button>
+			</form>
+		</div>
+	</div>
+	</header>
+	<li>
+		<table style="width:95%" class="table table-striped" table-layout="fixed">
+		    <col width="25%" />
+		    <col width="25%" />
+		    <col width="25%" />
+		    <col width="25%" />
+			<tr>
+				<th>Dish</th><th>Count</th><th>Orderer</th><th>Cost</th>
+			</tr>
+				{{#each arrayify conclusion}}
+				<tr><td>{{Dish}}</td><td>{{Count}}</td><td><p>{{Orderer}}</p></td><td>{{Cost}}</td></tr>
+				{{/each}}
+			<tr>
+				<th colspan="4">Total cost is: {{total}} NTD</th>
+			</tr>
+			<tr>
+				<th colspan="4">Total orders: {{order_count}}</th>
+			</tr>
+		</table>
+	</li>
+
+	<li>
+		<table style="width:95%" class="table table-striped">
+			<tr>
+				<th>Name</th><th>Dish</th><th>Price</th><th></th>
+			</tr>
+			{{#each orders}}
+				{{> order}}
+			{{/each}}
+		</table>
+		<header>
+				<h1>User credit management</h1>
+					<!-- Allow user to query their order history-->
+				<form class="admin-query">
+					<select name="people_selector">
+						{{> people}}
+					</select>
+					<input type="submit" value="Submit">
+				</form>
+					<table style="width:95%" class="table table-striped" table-layout="fixed">
+					    <col width="25%" />
+					    <col width="25%" />
+					    <col width="25%" />
+					    <col width="25%" />
+						<tr>
+							<th>Name</th><th>Dish</th><th>Price</th><th>Time</th>
+						</tr>
+						{{#each historyto}}
+							{{> history}}
+						{{/each}}
+						<tr>
+							<th>Balance</th><th>{{queryAsset}}</th><th></th><th></th>
+						</tr>
+
+
+
+
+
+
+					</table>
+					<form class="admin-management">
+						<input type="text" name="user_name" placeholder="Name" />
+					<select name="people_selector2">
+						{{> people}}
+					</select>
+						<input type="text" name="user_amount" placeholder="How much?" />
+						<button class="add_credit">Add credit</button>
+					</form>
+		</header>
+	</li>
+		<header>
+			<div>
+				<li>
+	    <div class="well">
+	      {{> picker}}
+	    </div>
+		<div class="row">
+	      <div class="col-md-6">
+		<p class="alert alert-info">Just Uploaded</p>
+		{{> lister}}
+	      </div>
+		</div>
+				</li>
+			</div>
+		</header>
+	</div>
+
+<div>
+	{{> chatroom}}
+</div>
+  </div>
+</body>
+
+
+
+
+
+
+
+

@@ -1,0 +1,6 @@
+Template.people.helpers({
+	shit: function() {
+		return
+	}, 
+	users: Users.find({}, {sort: {user_name: 1}})
+}); 

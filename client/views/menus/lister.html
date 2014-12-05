@@ -1,0 +1,17 @@
+<template name="lister">
+{{#each files}}
+<p>
+<a href="#" class="store btn btn-primary pull-right">
+  <span class="glyphicon glyphicon-download"></span>
+  store
+</a>
+<strong>{{filename}}</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <em>{{mimetype}}</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <em>{{size}}</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp; {{url}}<br>
+{{#if isImg}}
+<img src="{{url}}"><br>
+{{/if}}
+</p>
+{{/each}}
+</template>

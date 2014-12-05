@@ -1,0 +1,6 @@
+<template name="people">
+<option value="NoShow" name="query_name">Select a person</option>
+{{#each users}}
+<option value={{user_name}} name="query_name">{{user_name}}</option>
+{{/each}}
+</template> 

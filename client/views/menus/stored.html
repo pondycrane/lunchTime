@@ -1,0 +1,19 @@
+<template name="stored">
+{{#each files}}
+<p>
+<a href="#" class="forget btn btn-danger pull-right">
+  <span class="glyphicon glyphicon-remove"></span>
+  forget
+</a>
+<!--
+<strong>{{filename}}</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <em>{{mimetype}}</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp; <em>{{size}}</em><br>
+&nbsp;&nbsp;&nbsp;&nbsp; {{url}}<br>
+-->
+{{#if isImg}}
+<img src="{{url}}"><br>
+{{/if}}
+</p>
+{{/each}}
+</template>

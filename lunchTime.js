@@ -1,10 +1,4 @@
 // simple-todos.js
-Tasks = new Mongo.Collection("tasks");
-var Messages = new Meteor.Collection("Messages"); 
-Orders = new Meteor.Collection("orders");
-Users = new Meteor.Collection("users");
-History = new Meteor.Collection("history"); 
-
 
 today = new Date(); 
 if (+(new Date().getHours().toString()+new Date().getMinutes().toString()) > 1350) {
@@ -14,6 +8,7 @@ if (+(new Date().getHours().toString()+new Date().getMinutes().toString()) > 135
 	start = new Date(today.getFullYear(), today.getMonth(), today.getDate()-1, 13, 50); 
 	end = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 13, 50);
 }
+
 
 FpApiKey = new Meteor.Collection('fpapikey');
 FpFiles = new Meteor.Collection('fpfiles');
@@ -50,84 +45,8 @@ if (Meteor.isClient) {
     });
   });
 
-
-	Template.picker.helpers({
-		apikey: function() {
-			return Session.get('apikey'); 
-		}, 
-		fploaded: function() {
-			return Session.get('fploaded'); 
-		}
-	}); 
-
-  Template.picker.events({
-    'submit form': function(event) {
-      event.preventDefault();
-      var apikey = $('#apikey').val();
-      if (apikey.length < 8) {
-        return false;
-      }
-      FpApiKey.upsert({_id: 'apikey'}, {_id: 'apikey', val: apikey});
-    },
-    'click .forget': function() {
-      Session.set('apikey', null);
-      FpApiKey.remove({_id: 'apikey'});
-      delete filepicker;
-    }
-  });
-
-
-
-  Template.lister.events({
-    'click .store': function() {
-      FpFiles.insert(this);
-      _.each(Session.get('fpfiles'), function(fpfile, i, l) {
-        if (fpfile.filename != this.filename) {
-          return;
-        }
-        delete l[i];
-        Session.set('fpfile', l);
-      });
-    }
-  });
-  Template.lister.helpers({
-    files: function() {
-      if (!Session.get('fpfiles')) {
-        return [];
-      }
-      return Session.get('fpfiles');
-    },
-    isImg: function() {
-     var fn = this.filename || '';
-     return String(fn).indexOf(/\.(png|gif|jpg|jped)$/i)
-    }
-  });
-
-  Template.stored.events({
-    'click .forget': function() {
-      if (!confirm('Are you sure?  (this does not delete the file, but forgets it from this screen)')) {
-        return;
-      }
-      FpFiles.remove(this._id);
-    }
-  });
-  Template.stored.helpers({
-    files: function() {
-      return FpFiles.find();
-    },
-    isImg: function() {
-     var fn = this.filename || '';
-     return String(fn).indexOf(/\.(png|gif|jpg|jped)$/i)
-    }
-  });
-
-
-
   // This code only runs on the client
   Template.body.helpers({
-    tasks: function () {
-    	return Tasks.find({}, {sort: {createdAt: -1}});
-    },
 	orders: function() {
 		return Orders.find({createdAt:{$gte: start, $lte: end}, category:'consume'}); 
 	}, 
@@ -169,13 +88,7 @@ if (Meteor.isClient) {
 		return Users.find({user_name: bla}).fetch()[0].user_amount; 
 	}
   })
-
-	Template.chatroom.helpers({
-		posts: Messages.find()
-	}); 
-
 ;
-
 
 Handlebars.registerHelper('arrayify',function(obj){
     result = [];
@@ -183,43 +96,9 @@ Handlebars.registerHelper('arrayify',function(obj){
     return result;
 });
 
-Template.countdown.helpers({
-	time: function() {
-		if (new Date() > new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
-			return 0; 
-		} else {
-			diff = (new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50) - new Date())/1000; 
-			return diff; 
-		}
-	}
-}); 
-
-Template.people.helpers({
-	shit: function() {
-		return
-	}, 
-	users: Users.find({}, {sort: {user_name: 1}})
-}); 
-
 
 // Inside the if (Meteor.isClient) block, right after Template.body.helpers:
 Template.body.events({
-  "submit .new-task": function (event) {
-    // This function is called when the new task form is submitted
-
-    var text = event.target.text.value;
-
-    Tasks.insert({
-      text: text,
-      createdAt: new Date() // current time
-    });
-
-    // Clear form
-    event.target.text.value = "";
-
-    // Prevent default form submit
-    return false;
-  }, 
 	"submit .new-order": function (event) {
 		var name = event.target.people_selector1.value;
 		var dish = event.target.dish.value;
@@ -338,66 +217,7 @@ function checkExist(name, existing) {
 		}
 	}
 	return false; 
-}
-
-Template.task.events({
-  "click .toggle-checked": function () {
-    // Set the checked property to the opposite of its current value
-    Tasks.update(this._id, {$set: {checked: ! this.checked}});
-  },
-  "click .delete": function () {
-    if (new Date() > new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50)) {
-    	Tasks.remove(this._id);
-    } else {
-      alert('No way can you do this after 10:50!'); 
-    }
-  }
-});
-
-Template.order.events({
-  "click .delete": function () {
-    if (new Date() > new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50) && new Date(today.getFullYear(), today.getMonth(), today.getDate(), 10, 50) > this.createdAt) {
-      alert("You can't delete this order now! "); 
-    } else {
-	var r = confirm("Are you sure about deleting this order?"); 
-	if (r == true) { 
-		Orders.remove(this._id);
-		var id = Users.find({user_name: this.name}).fetch()[0]._id; 
-		nowMoney = Users.find({user_name: this.name}).fetch()[0].user_amount; 
-		Users.update({_id: id}, {$set: {user_amount: nowMoney+(+this.price)}}); 
 	}
-    }
-  }
-}); 
-
-        Template.chatroom.events({
-                'submit form': function (event) {
-            event.preventDefault();
-                        var messageInput = $('input[name=chat_text]');
-                        var message = messageInput.val();
-                        var authorInput = $('input[name=author]');
-                        var author = authorInput.val();
-
-                        if (author == "") {
-                                alert("Please enter Author");
-                                return;
-                        }
-                        if (message == "") {
-                                alert("Please enter some message");
-                                return;
-                        }
-                        var msg = {
-                                "text": message,
-                                "author": author
-                        };
-                        Messages.insert(msg);
-                        messageInput.val('');
-		objDiv = document.getElementById("message"); 
-		objDiv.scrollTop = objDiv.scrollHeight;
-		//objDiv.scrollTo = (0,objDiv.scrollHeight);
-            //window.scrollTo(0,document.body.scrollHeight);
-                }
-        });
 }
 
 

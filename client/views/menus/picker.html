@@ -1,0 +1,29 @@
+<template name="picker">
+{{#if apikey}}
+  {{#if fploaded}}
+    <div class="row">
+      <div class="col-md-8">
+        {{> pickerArea}}
+      </div>
+      <div class="col-md-4 text-right">
+        <a class="btn btn-default btn-sm forget" href="#">Forget API Key</a>
+      </div>
+    </div>
+  {{else}}
+    loading...
+  {{/if}}
+{{else}}
+  <form action="?" id="apikeyform" role="form" class="form-inline">
+    <div class="form-group">
+      <label>
+        <label class="sr-only" for="apikey">API Key</label>
+        <input class="form-control" type="text" id="apikey" placeholder="API Key Here..." style="min-width:300px;">
+      </label>
+      <div class="btn-group">
+        <button type="submit" class="btn btn-primary">Store API Key</button>
+        <a href="https://www.filepicker.io/" class="btn btn-link" target="_blank">Get One</a>
+      </div>
+    </div>
+  </form>
+{{/if}}
+</template>
