@@ -10,8 +10,6 @@ if (+(new Date().getHours().toString()+new Date().getMinutes().toString()) > 135
 }
 
 
-FpApiKey = new Meteor.Collection('fpapikey');
-FpFiles = new Meteor.Collection('fpfiles');
 FilepickerLoaded = false;
 
 if (Meteor.isClient) {

@@ -13,3 +13,11 @@ return Users.find();
 Meteor.publish('Orders', function() {
 return Orders.find();
 });
+
+Meteor.publish('FpApiKey', function() {
+return FpApiKey.find();
+});
+
+Meteor.publish('FpFiles', function() {
+return FpFiles.find();
+});

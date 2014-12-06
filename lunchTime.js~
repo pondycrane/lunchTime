@@ -88,9 +88,6 @@ if (Meteor.isClient) {
 		return Users.find({user_name: bla}).fetch()[0].user_amount; 
 	}
   })
-
-
-
 ;
 
 Handlebars.registerHelper('arrayify',function(obj){
