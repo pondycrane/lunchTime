@@ -2,6 +2,7 @@
 	<div style="overflow-y:scroll;" class="inner" id="message">
 	{{#each posts}}
 		<div>
+			<span style="color:purple;">{{prettifyDate createdAt}} </span>
 			<span style="color:yellow;">{{author}}: </span>
 			<span style="color:white;">{{text}}</span>
 		</div>

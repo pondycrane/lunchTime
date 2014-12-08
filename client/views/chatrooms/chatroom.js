@@ -31,6 +31,10 @@
 
 	Template.chatroom.helpers({
 		posts: function() {
-			return Messages.find({}, {sort: {createdAt: -1}}); 
+			return Messages.find({}, {sort: {createdAt: -1}, limit: 100}); 
 		}
 	}); 
+
+Handlebars.registerHelper("prettifyDate", function(timestamp) {
+    return (timestamp.getMonth()+1).toString()+'-'+(timestamp.getDate()).toString()+'_'+(timestamp.getHours()).toString()+':'+(timestamp.getMinutes()).toString()
+});
