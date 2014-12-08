@@ -31,7 +31,7 @@
 
 	Template.chatroom.helpers({
 		posts: function() {
-			return Messages.find({}, {sort: {createdAt: -1}, limit: 100}); 
+			return Messages.find({ createdAt : { $exists : true } }, {sort: {createdAt: -1}, limit: 100}); 
 		}
 	}); 
 
