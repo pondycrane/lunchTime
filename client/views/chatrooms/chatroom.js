@@ -1,7 +1,7 @@
 
         Template.chatroom.events({
                 'submit form': function (event) {
-            event.preventDefault();
+            	event.preventDefault();
                         var messageInput = $('input[name=chat_text]');
                         var message = messageInput.val();
                         var authorInput = $('input[name=author]');
@@ -17,12 +17,13 @@
                         }
                         var msg = {
                                 "text": message,
-                                "author": author
+                                "author": author, 
+				"createdAt": new Date()
                         };
                         Messages.insert(msg);
                         messageInput.val('');
 		objDiv = document.getElementById("message"); 
-		objDiv.scrollTop = objDiv.scrollHeight; 
+		//objDiv.scrollTop = objDiv.scrollHeight; 
 		//objDiv.scrollTo = (0,objDiv.scrollHeight); 
             //window.scrollTo(0,document.body.scrollHeight); 
                 }
@@ -30,6 +31,6 @@
 
 	Template.chatroom.helpers({
 		posts: function() {
-			return Messages.find(); 
+			return Messages.find({}, {sort: {createdAt: -1}}); 
 		}
 	}); 
