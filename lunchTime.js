@@ -1,7 +1,11 @@
 // simple-todos.js
 
 today = new Date(); 
-if (+(new Date().getHours().toString()+new Date().getMinutes().toString()) > 1350) {
+tempStr = new Date().getMinutes().toString()
+if (tempStr.length == 1) {
+	tempStr = '0'+tempStr; 
+}
+if (+(new Date().getHours().toString()+tempStr) > 1350) {
 	start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 13, 50); 
 	end = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1, 13, 50); 
 } else {
