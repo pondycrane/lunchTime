@@ -1,0 +1,6 @@
+<template name="history">
+	<tr>
+		<td>{{name}}</td><td>{{dish}}</td><td>{{price}}</td><td>{{createdAtString}}</td>
+	</tr>
+</template>
+
