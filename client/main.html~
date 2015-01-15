@@ -79,14 +79,15 @@
 					    <col width="25%" />
 					    <col width="25%" />
 						<tr>
+							<th>Balance</th><th>{{queryAsset}}</th><th></th><th></th>
+						</tr>
+						<tr>
 							<th>Name</th><th>Dish</th><th>Price</th><th>Time</th>
 						</tr>
 						{{#each historyto}}
 							{{> history}}
 						{{/each}}
-						<tr>
-							<th>Balance</th><th>{{queryAsset}}</th><th></th><th></th>
-						</tr>
+
 
 
 
@@ -126,11 +127,3 @@
 </div>
   </div>
 </body>
-
-
-
-
-
-
-
-

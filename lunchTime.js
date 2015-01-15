@@ -80,7 +80,7 @@ if (Meteor.isClient) {
 	}, 
 	historyto: function() {
 		var name = History.find().fetch()[0].name; 
-		return Orders.find({name: name}, {sort: {createdAt: -1}, limit: 30, sort: {createdAt: 1}}); 
+		return Orders.find({name: name}, {sort: {createdAt: -1}, limit: 30}); 
 	}, 
 	queryName: function() {
 		return History.find().fetch()[0].name; 
