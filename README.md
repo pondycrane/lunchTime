@@ -12,3 +12,5 @@ var user = 'old data'
 _.each(users, function(doc){
    Users.insert( {user_name: doc.user_name, user_amount: doc.user_amount, createdAt: doc.createdAt});
 });
+
+<img src="https://imgur.com/nYdvsr5.png">
